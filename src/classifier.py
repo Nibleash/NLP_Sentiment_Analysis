@@ -3,6 +3,7 @@ import torch
 import pandas as pd
 from typing import List
 
+print("hello")
 import nltk
 nltk.download('wordnet')
 nltk.download('punkt')
