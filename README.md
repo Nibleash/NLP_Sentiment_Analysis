@@ -39,7 +39,7 @@ To specify the aspect-term to the model, we tokenize the following:
 
 For example, to determine the opinion polarity regarding the target term "wait staff" in the example above, we would tokenize:
 
-`wait staff is blantently unappreciative of your business but its the best pie on the uws[SEP]SERVICE#GENERAL[SEP]Wait staff`
+`wait staff is blantently unappreciative of your business but its the best pie on the uws[SEP]SERVICE#GENERAL[SEP]wait staff`
 
 The encode_plus method allows us to tokenize the sentence, but it also
 - Adds special tokens *[CLS]* and *[SEP]* at the start and at the end of the sentence
