@@ -31,7 +31,7 @@ Regarding the data preprocessing and cleaning, we did not do too much since we u
 ## Tokenization using BERT pre-trained model
 
 For tokenisation and classification, we used the *bert-base-uncased*, which is a pretrained model on English language using a masked language modeling (MLM) objective. It has 110M parameters and a size of ~9GB (GPU RAM).
-Also, regarding the tokenized vector size, we hose to keep the default token size for BERT: 128.
+Also, regarding the tokenized vector size, we chose to keep the default token size for BERT: 128.
 
 To specify the aspect-term to the model, we tokenize the following:
 
@@ -49,7 +49,7 @@ The encode_plus method allows us to tokenize the sentence, but it also
 
 ## Sentiment analysis with BERTForSequenceClassification
 
-We trained the BertSequenceClassifier model on Colab GPU
+We trained the BertSequenceClassifier model on Colab GPU since we do not have one on our computers and using the CPU takes too much ressources and time.
 The three polarity labels positive, negative or neutral are encoded as integers 2, 1 and 0 respectively. Indeed, we tried 1, 0 and -1 but, since we use the Cross Entropy Loss, the encoded labels' values have to be between 0 and the number of classes.
 
 ## Results
