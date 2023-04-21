@@ -19,7 +19,7 @@ Since we observed that our training dataset was highly unblanced with the 'posit
 | ------------- | ------------- | ------------- |
 | Positive  | 70.2% |  64.6%  |
 | Neutral  | 3.8%  | 7.3% |
-| Negative | 25.9%  | 28.1% |
+| Negative | 26.0%  | 28.1% |
 
 ## Data preprocessing and cleaning
 
