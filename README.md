@@ -55,4 +55,4 @@ The three polarity labels positive, negative or neutral are encoded as integers 
 ## Results
 
 We trained the classifier using a Cross Entropy Loss.
-Using the described classifier trained on 4 epochs, we obtained a 83.03% (+- 1.43) accuracy on the dev set.
+Using the described classifier trained on 5 epochs, we obtained a 83.78% (+- 1.35) accuracy on the dev set.

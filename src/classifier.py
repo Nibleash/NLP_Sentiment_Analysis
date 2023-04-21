@@ -37,7 +37,7 @@ class Classifier():
         self.model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=3,
             output_attentions=False, output_hidden_states=False)
         self.batch_size = 16
-        self.epochs = 8
+        self.epochs = 5
         self.token_length = 128
         self.optimizer = torch.optim.AdamW(self.model.parameters(), lr = 5e-5, eps = 1e-08) # Very low learning rate to finetune the model don't disturb too much the pretrained weights.
 
