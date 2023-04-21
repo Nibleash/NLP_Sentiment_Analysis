@@ -42,7 +42,7 @@ For example, to determine the opinion polarity regarding the target term "wait s
 `wait staff is blantently unappreciative of your business but its the best pie on the uws[SEP]SERVICE#GENERAL[SEP]wait staff`
 
 The ```encode_plus``` method allows us to tokenize the sentence, but it also
-- Adds special tokens *[CLS]* and *[SEP]* at the start and at the end of the sentence
+- Adds special tokens [CLS] and [SEP] at the start and at the end of the sentence
 - Pads or truncates to the maximum length of our sentences
 - Maps each token to its ID
 - Creates and returns the attention mask
