@@ -1,5 +1,7 @@
 # NLP Assignment: Aspect-Term Polarity Classification in Sentiment Analysis 🌊🔥
 
+Made by Martin PONCHON, Ethan SETROUK, Robinson DENEVE and Ugo DEMY.
+
 ## Dataset augmentation
 
 Our datasets are TSV files with one instance per line, each line containing the polarity of the opinion, the aspect category on which the opinion is expressed, a specific target term, the character offsets of the term (start:end), and the sentence in which the term occurs and the opinion is expressed.
@@ -28,13 +30,16 @@ Regarding the data preprocessing and cleaning, we did not do too much since we u
 
 ## Tokenization using BERT pre-trained model
 
+For tokenisation and classification, we used the *bert-base-uncased*, which is a pretrained model on English language using a masked language modeling (MLM) objective. It has 110M parameters and a size of ~9GB (GPU RAM).
+Also, regarding the tokenized vector size, we hose to keep the default token size for BERT: 128.
+
 To specify the aspect-term to the model, we tokenize the following:
 
-sentence [SEP] aspect [SEP] target
+`sentence[SEP]aspect[SEP]target`
 
 For example, to determine the opinion polarity regarding the target term "wait staff" in the example above, we would tokenize:
 
-"Wait staff is blantently unappreciative of your business but its the best pie on the UWS! [SEP] SERVICE#GENERAL [SEP] Wait staff"
+`wait staff is blantently unappreciative of your business but its the best pie on the uws[SEP]SERVICE#GENERAL[SEP]Wait staff`
 
 The encode_plus method allows us to tokenize the sentence, but it also
 - Adds special tokens *[CLS]* and *[SEP]* at the start and at the end of the sentence
@@ -44,6 +49,7 @@ The encode_plus method allows us to tokenize the sentence, but it also
 
 ## Sentiment analysis with BERTForSequenceClassification
 
+We trained the BertSequenceClassifier model on Colab GPU
 The three polarity labels positive, negative or neutral are encoded as integers 2, 1 and 0 respectively. Indeed, we tried 1, 0 and -1 but, since we use the Cross Entropy Loss, the encoded labels' values have to be between 0 and the number of classes.
 
 ## Results
