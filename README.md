@@ -30,7 +30,7 @@ Regarding the data preprocessing and cleaning, we did not do too much since we u
 
 ## Tokenization using BERT pre-trained model
 
-For tokenisation and classification, we used the *bert-base-uncased*, which is a pretrained model on English language using a masked language modeling (MLM) objective. It has 110M parameters and a size of ~9GB (GPU RAM).
+For tokenization and classification, we used the *bert-base-uncased*, which is a pretrained model on English language using a masked language modeling (MLM) objective. It has 110M parameters and a size of ~9GB (GPU RAM).
 Also, regarding the tokenized vector size, we chose to keep the default token size for BERT: 128.
 
 To specify the aspect-term to the model, we tokenize the following:
