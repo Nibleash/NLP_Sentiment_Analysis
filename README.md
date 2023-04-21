@@ -1,4 +1,4 @@
-# NLP Assignment: Aspect-Term Polarity Classification in Sentiment Analysis
+# NLP Assignment: Aspect-Term Polarity Classification in Sentiment Analysis 🌊🔥
 
 ## Dataset augmentation
 
@@ -44,7 +44,7 @@ The encode_plus method allows us to tokenize the sentence, but it also
 
 ## Sentiment analysis with BERTForSequenceClassification
 
-The three polarity labels positive, negative or neutral are encoded as integers 1, 0 and -1 respectively.
+The three polarity labels positive, negative or neutral are encoded as integers 2, 1 and 0 respectively. Indeed, we tried 1, 0 and -1 but, since we use the Cross Entropy Loss, the encoded labels' values have to be between 0 and the number of classes.
 
 ## Results
 
