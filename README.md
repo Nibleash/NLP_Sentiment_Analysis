@@ -8,7 +8,7 @@ Our datasets are TSV files with one instance per line, each line containing the 
 
 Here is an example of a line:
 
-negative SERVICE#GENERAL Wait staff 0:10 Wait staff is blantently unappreciative of your business but its the best pie on the UWS!
+`negative SERVICE#GENERAL Wait staff 0:10 Wait staff is blantently unappreciative of your business but its the best pie on the UWS!`
 
 This means that the opinion polarity regarding the target term *"wait staff"*, which has
 the aspect category **SERVICE#GENERAL**, is **negative**.
