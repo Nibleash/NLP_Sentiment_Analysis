@@ -9,7 +9,7 @@ Here is an example of a line:
 negative SERVICE#GENERAL Wait staff 0:10 Wait staff is blantently unappreciative of your business but its the best pie on the UWS!
 
 This means that the opinion polarity regarding the target term *"wait staff"*, which has
-the aspect category *SERVICE#GENERAL, is **negative*.
+the aspect category **SERVICE#GENERAL**, is **negative**.
 
 Since we observed that our training dataset was highly unblanced with the 'positive' class representing a large proportion of our dataset, we considered data augmentation to increase the number of data points in the 'neutral' and 'negative' classes. To do so, we used back translation, which consists in translating content from english to french and then back to english multiple times, thus obtaining a slightly different sentence. We also added new sentences, annotated manually.
 
@@ -32,9 +32,9 @@ To specify the aspect-term to the model, we tokenize the following:
 
 sentence [SEP] aspect [SEP] target
 
-For example, to determine the opinion polarity regarding the target term "wait staff" in the example above, we tokenize:
+For example, to determine the opinion polarity regarding the target term "wait staff" in the example above, we would tokenize:
 
-"Wait staff is blantently unappreciative of your business but its the best pie on the UWS! [SEP] Wait staff [SEP] "
+"Wait staff is blantently unappreciative of your business but its the best pie on the UWS! [SEP] SERVICE#GENERAL [SEP] Wait staff"
 
 The encode_plus method allows us to tokenize the sentence, but it also
 - Adds special tokens *[CLS]* and *[SEP]* at the start and at the end of the sentence
