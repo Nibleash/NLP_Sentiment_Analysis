@@ -11,7 +11,6 @@ nltk.download('wordnet')
 nltk.download('punkt')
 from nltk.stem import WordNetLemmatizer
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def clean_sentences(df):
     clean_df = df.copy()
@@ -32,28 +31,28 @@ def clean_sentences(df):
 class Classifier():
 
     def __init__(self):
-        self.mapping_dict = {'positive': 0, 'neutral': 1, 'negative': 2}
+        self.mapping_dict = {'positive': 2, 'neutral': 1, 'negative': 0}
         self.reverse_mapping_dict = {v: k for k, v in self.mapping_dict .items()}
         self.tokenizer_self_bert = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
         self.model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=3,
             output_attentions=False, output_hidden_states=False)
         self.batch_size = 16
-        self.epochs = 1
-        self.optimizer = torch.optim.AdamW(self.model.parameters(), lr = 5e-5, eps = 1e-08) # Recommended learning rates (Adam): 5e-5, 3e-5, 2e-5. See: https://arxiv.org/pdf/1810.04805.pdf
+        self.epochs = 8
+        self.token_length = 128
+        self.optimizer = torch.optim.AdamW(self.model.parameters(), lr = 5e-5, eps = 1e-08) # Very low learning rate to finetune the model don't disturb too much the pretrained weights.
 
 
     def tokenize(self, df):
         token_df = df.copy()
         token_df['bert_encoded_dict'] = token_df['bert_encoded'].apply(
             lambda x: self.tokenizer_self_bert.encode_plus(text=x, add_special_tokens=True,
-            padding='max_length', max_length=self.max_sentence_length, return_attention_mask=True)) #, return_tensors='pt'
+            padding='max_length', max_length=self.token_length, return_attention_mask=True))
         token_df = pd.concat([token_df.drop(['bert_encoded_dict'], axis=1), token_df['bert_encoded_dict'].apply(pd.Series)], axis=1)
         del token_df['token_type_ids']
-        print(f"Input vectors final length: {np.vstack(token_df['input_ids'].apply(np.ravel)[0]).shape}")
         return token_df
 
 
-    def train(self, train_filename: str, dev_filename: str, device: torch.device = device):
+    def train(self, train_filename: str, dev_filename: str, device: torch.device):
         """
         Trains the classifier model on the training set stored in file train_filename.
         """
@@ -62,16 +61,11 @@ class Classifier():
         data = pd.read_csv(train_filename, sep='\t', header=None, names=['polarity', 'aspect', 'target', 'position', 'sentence'])
         clean_data = clean_sentences(data)
 
-        # Before encoding, we need to know the size of the longest sequence to pad accordingly
-        clean_data['bert_encoded'] = clean_data['sentence'].astype(str) + '[SEP]' + clean_data['target'].astype(str)
-        clean_data['bert_encoded_split'] = clean_data['bert_encoded'].str.split(' ')
-        self.max_sentence_length = max([len(i) for i in clean_data['bert_encoded'].values])
-        print(f'Maximum sentence length in training data: {self.max_sentence_length}')
-        # print(f'\n{clean_data.head()}\n')
+        # Before encoding, we need to aggregate all the text we want to consider using BERT specific markers
+        clean_data['bert_encoded'] = clean_data['sentence'].astype(str)  + '[SEP]' + clean_data['aspect'].astype(str) + '[SEP]' + clean_data['target'].astype(str)
 
         # Now we need to tokenize the text using BertTokenizer and to format the input vectors
         tokenize_data = self.tokenize(clean_data)
-        print(f'\n{tokenize_data.head()}\n')
         tokenize_data['polarity'] = tokenize_data['polarity'].map(self.mapping_dict)
         token_ids = torch.tensor(np.vstack(tokenize_data['input_ids'].apply(np.ravel))).to(device)
         token_attention = torch.tensor(np.vstack(tokenize_data['attention_mask'].apply(np.ravel))).to(device)
@@ -101,7 +95,7 @@ class Classifier():
             print(f'Epoch {epoch}: training loss = {tr_loss}')
 
 
-    def predict(self, data_filename: str, device: torch.device = device) -> List[str]:
+    def predict(self, data_filename: str, device: torch.device) -> List[str]:
         """
         Predicts class labels for the input instances in file 'data_filename'.
         Returns the list of predicted labels.
@@ -112,10 +106,8 @@ class Classifier():
         clean_test_data = clean_sentences(data_test)
 
         # Again we use BertTokenizer to tokenize the text: target words and sentences
-        clean_test_data['bert_encoded'] = clean_test_data['sentence'].astype(str) + '[SEP]' + clean_test_data['target'].astype(str)
-        # print(f'\n{clean_test_data.head()}\n')
+        clean_test_data['bert_encoded'] = clean_test_data['sentence'].astype(str)  + '[SEP]' + clean_test_data['aspect'].astype(str) + '[SEP]' + clean_test_data['target'].astype(str)
         tokenize_test_data = self.tokenize(clean_test_data)
-        print(f'\n{tokenize_test_data.head()}\n')
         
         # Format the test input vectors and prepare DataLoader
         test_token_ids = torch.tensor(np.vstack(tokenize_test_data['input_ids'].apply(np.ravel))).to(device)
